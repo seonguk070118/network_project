@@ -1,39 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>음료수 재고 관리 - 재고 조회</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음료수 목록</title>
     <style>
-        #container{
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 100px;
+            height: 100vh;
         }
-        .main{
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        form {
             display: flex;
-            gap: 400px;
+            flex-direction: column;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 8px;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <h1>음료수 재고</h1>
-        <div class="main">
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-        </div>
-        
-    </div>
-    
+
+    <table id="drinkTable">
+        <thead>
+            <tr>
+                <th>음료수 아이디</th>
+                <th>음료수 이름</th>
+                <th>음료수 재고</th>
+                <th>음료수 가격</th>
+                <th>동작</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>콜라</td>
+                <td>50</td>
+                <td>1,000원</td>
+                <td><button onclick="editRow(1)">수정</button> <button onclick="deleteRow(1)">삭제</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>사이다</td>
+                <td>30</td>
+                <td>800원</td>
+                <td><button onclick="editRow(2)">수정</button> <button onclick="deleteRow(2)">삭제</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>오렌지 주스</td>
+                <td>20</td>
+                <td>1,500원</td>
+                <td><button onclick="editRow(3)">수정</button> <button onclick="deleteRow(3)">삭제</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form id="drinkForm">
+        <h2>음료수 정보 수정</h2>
+        <input type="hidden" id="editId" value="">
+        <label for="editName">음료수 이름:</label>
+        <input type="text" id="editName" required>
+        <label for="editStock">음료수 재고:</label>
+        <input type="number" id="editStock" required>
+        <label for="editPrice">음료수 가격:</label>
+        <input type="text" id="editPrice" required>
+        <button type="button" onclick="saveEdit()">저장</button>
+    </form>
+
+    <button onclick="refreshTable()">테이블 새로고침</button>
+
+    <script>
+        function editRow(id) {
+            let row = document.getElementById("drinkTable").rows[id];
+            document.getElementById("editId").value = id;
+            document.getElementById("editName").value = row.cells[1].textContent;
+            document.getElementById("editStock").value = row.cells[2].textContent;
+            document.getElementById("editPrice").value = row.cells[3].textContent;
+        }
+
+        function deleteRow(id) {
+            document.getElementById("drinkTable").deleteRow(id);
+        }
+
+        function saveEdit() {
+            let id = document.getElementById("editId").value;
+            let table = document.getElementById("drinkTable");
+            let row = table.rows[id];
+            row.cells[1].textContent = document.getElementById("editName").value;
+            row.cells[2].textContent = document.getElementById("editStock").value;
+            row.cells[3].textContent = document.getElementById("editPrice").value;
+            document.getElementById("drinkForm").reset();
+        }
+
+        function refreshTable() {
+            // 아무 동작 없음
+        }
+    </script>
+
 </body>
 </html>
