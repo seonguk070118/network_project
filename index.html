@@ -113,7 +113,7 @@
             document.getElementById("editId").value = id;
             document.getElementById("editName").value = row.cells[1].textContent;
             document.getElementById("editStock").value = row.cells[2].textContent;
-            document.getElementById("editPrice").value = row.cells[3].textContent;
+            document.getElementById("editPrice").value = row.cells[3].textContent.replace(/,/g, ''); // 콤마 제거
         }
 
         function deleteRow(id) {
@@ -126,7 +126,11 @@
             let row = table.rows[id];
             row.cells[1].textContent = document.getElementById("editName").value;
             row.cells[2].textContent = document.getElementById("editStock").value;
-            row.cells[3].textContent = document.getElementById("editPrice").value;
+            
+            // "원"을 값 뒤에 붙여서 표시
+            let price = Number(document.getElementById("editPrice").value).toLocaleString(); // 천단위 콤마 추가
+            row.cells[3].textContent = price + "원";
+            
             document.getElementById("drinkForm").reset();
         }
 
