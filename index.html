@@ -113,7 +113,7 @@
             document.getElementById("editId").value = id;
             document.getElementById("editName").value = row.cells[1].textContent;
             document.getElementById("editStock").value = row.cells[2].textContent;
-            document.getElementById("editPrice").value = row.cells[3].textContent.replace(/,/g, ''); // 콤마 제거
+            document.getElementById("editPrice").value = row.cells[3].textContent.replace(/[^\d]/g, ''); // 숫자 이외의 문자 제거
         }
 
         function deleteRow(id) {
