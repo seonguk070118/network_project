@@ -1,39 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>음료수 재고 관리 - 재고 조회</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음료수 목록</title>
     <style>
-        #container{
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 100px;
+            height: 100vh;
         }
-        .main{
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0080bc;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        form {
             display: flex;
-            gap: 400px;
+            flex-direction: column;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+
+        button.saveButton {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4caf50;
+            /* Green background */
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button.refreshButton {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #0080bc;
+            /* Blue background */
+            color: white;
+            border: none;
+            border-radius: 4px;
         }
     </style>
 </head>
+
 <body>
-    <div id="container">
-        <h1>음료수 재고</h1>
-        <div class="main">
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-            <div id="i">
-                <div class="drink">음료수1</div>
-                <div class="trash">10</div>
-            </div>
-        </div>
-        
-    </div>
-    
+
+    <table id="drinkTable">
+        <thead>
+            <tr>
+                <th>음료수 아이디</th>
+                <th>음료수 이름</th>
+                <th>음료수 재고</th>
+                <th>음료수 가격</th>
+                <th>동작</th>
+            </tr>
+        </thead>
+        <tbody id="drinkTableBody">
+            <tr>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td><button onclick="editRow(1)">수정</button></td>
+            </tr>
+            <tr>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td><button onclick="editRow(2)">수정</button></td>
+            </tr>
+            <tr>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td>?</td>
+                <td><button onclick="editRow(3)">수정</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form id="drinkForm">
+        <h2>음료수 정보 수정</h2>
+        <input type="hidden" id="editId" value="">
+        <label for="editName">음료수 이름:</label>
+        <input type="text" id="editName" required>
+        <label for="editStock">음료수 재고:</label>
+        <input type="number" id="editStock" required>
+        <label for="editPrice">음료수 가격:</label>
+        <input type="text" id="editPrice" required>
+        <button type="button" onclick="saveEdit()">저장</button>
+    </form>
+
+    <button onclick="refreshTable()">테이블 새로고침</button>
+
+    <script>
+        function editRow(id) {
+            let row = [...document.getElementById("drinkTable").rows].find(row => row.cells[0].textContent == id);
+            document.getElementById("editId").value = id;
+            document.getElementById("editName").value = row.cells[1].textContent;
+            document.getElementById("editStock").value = row.cells[2].textContent;
+            document.getElementById("editPrice").value = Math.floor(row.cells[3].textContent);
+        }
+
+        function saveEdit() {
+            let id = document.getElementById("editId").value;
+            let name = document.getElementById("editName").value;
+            let stock = document.getElementById("editStock").value;
+            let price = document.getElementById("editPrice").value;
+
+            // 가격을 소수점 없이 변환
+            let priceWithoutDecimal = Math.floor(parseFloat(price));
+
+            let formData = new FormData();
+            formData.append('id', id);
+            formData.append('name', name);
+            formData.append('stock', stock);
+            formData.append('price', price);
+
+            fetch('/update', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result == 'success') {
+                        alert('수정 완료');
+                        refreshTable();
+                        // 수정 성공 후 아두이노에 가격 정보 업데이트
+                        updateArduino(id, priceWithoutDecimal);
+                    } else {
+                        alert('수정 실패: ' + data.error);
+                    }
+                });
+
+            document.getElementById('drinkForm').reset();
+        }
+
+        function refreshTable() {
+            fetch('/refresh')
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.getElementById("drinkTableBody");
+                    tableBody.innerHTML = ""; // 테이블 바디 초기화
+                    data.drinks.forEach(drink => {
+                        let row = tableBody.insertRow();
+                        row.insertCell(0).textContent = drink[0];  // 음료수 아이디
+                        row.insertCell(1).textContent = drink[1];  // 음료수 이름
+                        row.insertCell(2).textContent = drink[3];  // 음료수 재고
+                        row.insertCell(3).textContent = Math.floor(drink[2]);  // 음료수 가격
+                        let actionCell = row.insertCell(4);  // 동작 셀
+                        actionCell.innerHTML = `<button onclick="editRow('${drink[0]}')">수정</button>`;
+                    });
+                });
+        }
+        window.onload = refreshTable;
+
+        function updateArduino(id, newPrice) {
+            let formData = new FormData();
+            formData.append('new_price', newPrice);
+            formData.append('item', id);
+            fetch('/update_arduino', {
+                method: 'POST',
+                body: formData
+            });
+        }
+    </script>
+
+
 </body>
+
 </html>
