@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>음료수 목록</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f1f1ef;
             margin: 0;
             padding: 0;
             display: flex;
@@ -31,7 +32,7 @@
         }
 
         th {
-            background-color: #0080bc;
+            background-color: #0d6efd;
             color: white;
         }
 
@@ -84,6 +85,7 @@
 <body>
 
     <table id="drinkTable">
+        <h1>음료수 자판기 재고 관리</h1>
         <thead>
             <tr>
                 <th>음료수 아이디</th>
@@ -99,21 +101,21 @@
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
-                <td><button onclick="editRow(1)">수정</button></td>
+                <td><button type="button" class="btn btn-primary" onclick="editRow(1)">수정</button></td>
             </tr>
             <tr>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
-                <td><button onclick="editRow(2)">수정</button></td>
+                <td><button type="button" class="btn btn-primary" onclick="editRow(2)">수정</button></td>
             </tr>
             <tr>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
-                <td><button onclick="editRow(3)">수정</button></td>
+                <td><button type="button" class="btn btn-primary"onclick="editRow(3)">수정</button></td>
             </tr>
         </tbody>
     </table>
@@ -127,10 +129,10 @@
         <input type="number" id="editStock" required>
         <label for="editPrice">음료수 가격:</label>
         <input type="text" id="editPrice" required>
-        <button type="button" onclick="saveEdit()">저장</button>
+        <button type="button" class="btn btn-outline-primary" type="button" onclick="saveEdit()">저장</button>
     </form>
 
-    <button onclick="refreshTable()">테이블 새로고침</button>
+    <button type="button" class="btn btn-outline-danger" onclick="refreshTable()">테이블 새로고침</button>
 
     <script>
         function editRow(id) {
