@@ -4,18 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <title>음료수 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <title>음료수 목록</title>
     <style>
+                @font-face {
+            font-family: 'Cafe24Supermagic-Bold-v1.0';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/Cafe24Supermagic-Bold-v1.0.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f1f1ef;
+            background-color: #FFFF;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             height: 100vh;
+            font-family:  'Cafe24Supermagic-Bold-v1.0', sans-serif;
         }
 
         table {
@@ -26,9 +34,10 @@
 
         th,
         td {
-            border: 1px solid #ddd;
+            border: 1px solid #FFF;
             padding: 8px;
             text-align: center;
+            border: 2px solid #333;
         }
 
         th {
@@ -37,7 +46,8 @@
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            border: 2px solid #333;
+            background-color: #FFFF
         }
 
         button {
@@ -102,6 +112,7 @@
                 <td>?</td>
                 <td>?</td>
                 <td><button type="button" class="btn btn-primary" onclick="editRow(1)">수정</button></td>
+
             </tr>
             <tr>
                 <td>?</td>
@@ -109,13 +120,14 @@
                 <td>?</td>
                 <td>?</td>
                 <td><button type="button" class="btn btn-primary" onclick="editRow(2)">수정</button></td>
+
             </tr>
             <tr>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
                 <td>?</td>
-                <td><button type="button" class="btn btn-primary"onclick="editRow(3)">수정</button></td>
+                <td><button type="button" class="btn btn-primary" onclick="editRow(3)">수정</button></td>
             </tr>
         </tbody>
     </table>
@@ -190,10 +202,11 @@
                         row.insertCell(2).textContent = drink[3];  // 음료수 재고
                         row.insertCell(3).textContent = Math.floor(drink[2]);  // 음료수 가격
                         let actionCell = row.insertCell(4);  // 동작 셀
-                        actionCell.innerHTML = `<button onclick="editRow('${drink[0]}')">수정</button>`;
+                        actionCell.innerHTML = `<button type="button" class="btn btn-primary" onclick="editRow('${drink[0]}')">수정</button>`;
                     });
                 });
         }
+
         window.onload = refreshTable;
 
         function updateArduino(id, newPrice) {
